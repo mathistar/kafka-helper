@@ -1,0 +1,36 @@
+spring:
+  profiles:
+    active: local
+---
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: group1
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+      enable-auto-commit: false
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    admin:
+      properties:
+        bootstrap.servers: localhost:9092
+    listener:
+      ack-mode: manual
+  config:
+    activate:
+      on-profile: local
+app:
+  topic: customer-topic
+  group: group2
+  retry-group: retry-group
+  retry-topic: customer-retry-topic
+  retry-cron-job: 0 50 20 * * *

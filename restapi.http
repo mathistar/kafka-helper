@@ -1,0 +1,11 @@
+POST http://localhost:8080/customers
+Content-Type: application/json
+
+{
+  "id": "123",
+  "name": "Hello2"
+}
+
+###
+
+GET http://localhost:8080/trigger/customers/10
