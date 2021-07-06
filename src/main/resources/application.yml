@@ -28,9 +28,7 @@ spring:
   config:
     activate:
       on-profile: local
-app:
-  topic: customer-topic
-  group: group2
+kafka-helper:
   retry-group: retry-group
   retry-topic: customer-retry-topic
   retry-cron-job: 0 50 20 * * *

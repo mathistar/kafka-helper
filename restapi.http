@@ -8,4 +8,4 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/trigger/customers/10
+GET http://localhost:8080/trigger/customers/20

@@ -20,19 +20,22 @@ import java.util.concurrent.TimeUnit;
 public class CustomerConsumer {
   private final RetryService retryService;
   private final List<Integer> customerIds = new ArrayList<>();
+  private final List<Integer> retryIds = new ArrayList<>();
 
-  @Value("${app.topic}")
-  private String topic;
 
-  @KafkaListener(topics = {"${app.topic}"}, groupId = "${app.group}")
+  @KafkaListener(topics = {TopicConfig.CUSTOMER_TOPIC}, groupId = "customer_group")
   public void onMessage(ConsumerRecord<String, Customer> consumerRecord, Acknowledgment acknowledgment) {
     Customer customer = consumerRecord.value();
     log.info("Customer in main  : {} ", consumerRecord.key());
     int key = Integer.parseInt(consumerRecord.key());
-    if ( key % 2 == 1 && !customerIds.contains(key)) {
+
+    if (!customerIds.contains(key)) {
       customerIds.add(key);
-      retryService.processAfter(60, TimeUnit.SECONDS, topic, consumerRecord.key(), customer);
+      retryService.processAfter(1, TopicConfig.CUSTOMER_TOPIC, consumerRecord.key(), customer);
+    } else {
+      retryIds.add(key);
     }
+    log.info("retried items {} and received {}", customerIds, retryIds);
     acknowledgment.acknowledge();
   }
 }
